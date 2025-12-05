@@ -1,0 +1,22 @@
+id: "assessment-analyzer-agent"
+name: "Strict Assessment Analyzer"
+version: "1.0"
+
+# 1. System Prompt (The Persona)
+# Points to an external Markdown file
+systemPromptPath: "prompts/system.md"
+
+# 2. User Prompt (The Task Template)
+# This is the template into which we inject student data
+userPromptPath: "prompts/user.md"
+
+# 3. Model Configuration
+model:
+  provider: "openai"
+  name: "gpt-4o-mini"
+  temperature: 0.1
+
+# 4. Agent Specific Data (Static Knowledge)
+# Any extra data this specific agent needs to know
+metadata:
+  strictMode: true

@@ -1,0 +1,10 @@
+id: "assessment-analyzer-workflow"
+name: "Standard Math Assessment"
+version: "1.0"
+type: "CHAIN"  # <--- Indicates a linear sequence
+
+steps:
+  - stepId: "step_1_feedback"
+    agentId: "assessment-analyzer-agent"
+    # Using a template to combine original data + mentor feedback
+    inputTemplate: "Student Data: {{USER_INPUT}} \n Mentor Feedback: {{step_2_feedback}}"

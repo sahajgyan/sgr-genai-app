@@ -1,0 +1,18 @@
+id: "tutoring_workflow_v1"
+name: "Adaptive Tutoring"
+type: "ROUTER" # <--- Indicates the LLM decides the path
+
+# The "Manager" who decides what to do next
+managerAgentId: "router_agent_v1"
+
+# The Prompt that tells the Manager how to route
+routerSystemPromptPath: "prompts/workflows/router_rules.md"
+
+# Whitelist of allowed agents the Manager can call
+allowedAgents:
+  - "math_grader_v1"
+  - "history_grader_v1"
+  - "human_escalation_agent"
+
+# Safety: Stop after 5 hops to prevent infinite loops
+maxSteps: 5
