@@ -13,7 +13,7 @@ userPromptPath: "prompts/user.md"
 # 3. Model Configuration
 model:
   provider: "openai"
-  name: "gpt-4o-mini"
+  name: "gpt-4o"
   temperature: 0.1
 
 # 4. Agent Specific Data (Static Knowledge)
