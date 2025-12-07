@@ -7,6 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SgrGenAIApplication {
 
     public static void main(String[] args) {
+        System.setProperty(
+                "langchain4j.http-client.factory",
+                "dev.langchain4j.http.client.spring.restclient.SpringRestClientBuilderFactory");
         SpringApplication.run(SgrGenAIApplication.class, args);
     }
 }

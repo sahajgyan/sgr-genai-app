@@ -16,3 +16,17 @@ allowedAgents:
 
 # Safety: Stop after 5 hops to prevent infinite loops
 maxSteps: 5
+
+
+
+id: "math_grader"
+model:
+  provider: "anthropic"
+  name: "claude-3-5-sonnet-20240620"
+  temperature: 0.1
+
+id: "physics_tutor"
+model:
+  provider: "gemini"
+  name: "gemini-2.5-flash"
+  temperature: 0.1

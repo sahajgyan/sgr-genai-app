@@ -2,6 +2,7 @@ package com.sgr.ai.common.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.sgr.ai.common.AgentExecutionException;
 import com.sgr.ai.common.config.AgentDefinition;
 import com.sgr.ai.common.config.WorkflowDefinition;
 
@@ -21,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
+import dev.langchain4j.exception.HttpException; // Ensure you have this import
+import java.net.SocketTimeoutException;
 
 /**
  * Orchestrates the execution of workflows defined in YAML files.
@@ -33,7 +36,7 @@ public class WorkflowEngine {
 
     // Infrastructure
     private final AgentRegistry agentRegistry;
-    private final ChatModel chatModel; // The shared LLM (e.g., GPT-4)
+    private final ChatModelFactory chatModelFactory; // The shared LLM (e.g., GPT-4)
     private final ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
 
     // Config
@@ -43,10 +46,10 @@ public class WorkflowEngine {
     private final Map<String, WorkflowDefinition> workflowCache = new ConcurrentHashMap<>();
 
     public WorkflowEngine(AgentRegistry agentRegistry,
-            ChatModel chatModel,
+            ChatModelFactory chatModel,
             @Value("${genai.base-path}") String basePath) {
         this.agentRegistry = agentRegistry;
-        this.chatModel = chatModel;
+        this.chatModelFactory = chatModel;
         this.workflowsDirectory = Paths.get(basePath, "workflows").toAbsolutePath().normalize();
     }
 
@@ -177,14 +180,67 @@ public class WorkflowEngine {
      * In a full implementation, this constructs the AiService interface
      * dynamically.
      */
+
+    // ... inside WorkflowEngine class ...
+
     private String executeAgent(String agentId, String userMessage) {
         AgentDefinition def = agentRegistry.getAgent(agentId);
-        if (def == null)
+        if (def == null) {
             throw new IllegalArgumentException("Agent ID not found: " + agentId);
+        }
 
-        // Simple prompt execution using the shared ChatModel
-        // In prod, you would bind Tools here using .tools(def.allowedTools())
-        return chatModel.chat(def.systemPrompt() + "\n\nUser Input:\n" + userMessage);
+        try {
+            ChatModel specifiedChatModel = chatModelFactory.getModel(def.model());
+
+            // Sanitize Prompt (optional but recommended)
+            String fullPrompt = def.systemPrompt() + "\n\nUser Input:\n" + userMessage;
+
+            // Execute
+            return specifiedChatModel.chat(fullPrompt);
+
+        } catch (HttpException e) {
+            // Handle HTTP errors from the Provider (OpenAI/Gemini)
+            int code = e.statusCode();
+            String errorMsg;
+            boolean retryable = false;
+
+            switch (code) {
+                case 404:
+                    errorMsg = "Model not found. Check your YAML config (provider/model name).";
+                    break;
+                case 429:
+                    errorMsg = "Rate limit exceeded (Quota full). Please try again later.";
+                    retryable = true;
+                    break;
+                case 401:
+                    errorMsg = "Invalid API Key. Contact Administrator.";
+                    break;
+                case 500:
+                case 503:
+                    errorMsg = "AI Provider is currently down.";
+                    retryable = true;
+                    break;
+                default:
+                    errorMsg = "AI Provider Error: " + e.getMessage();
+            }
+
+            // Log it for the backend devs
+            log.error("Agent [{}] failed with HTTP {}: {}", agentId, code, errorMsg);
+
+            // Throw custom error for the Job Manager
+            throw new AgentExecutionException(errorMsg, code, retryable, e);
+
+        } catch (RuntimeException e) {
+            // Handle Timeouts (often wrapped in RuntimeException in some clients)
+            if (e.getCause() instanceof SocketTimeoutException) {
+                log.error("Agent [{}] timed out.", agentId);
+                throw new AgentExecutionException("AI didn't respond in time.", 408, true, e);
+            }
+
+            // Handle generic crashes
+            log.error("Agent [{}] crashed unexpectedly.", agentId, e);
+            throw new AgentExecutionException("Internal Agent Error: " + e.getMessage(), 500, false, e);
+        }
     }
 
     private String resolveInput(WorkflowDefinition.Step step, Map<String, String> context, String lastOutput) {
