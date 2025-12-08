@@ -3,6 +3,7 @@ name: "Standard Math Assessment"
 version: "1.0"
 type: "CHAIN"  # <--- Indicates a linear sequence
 
+
 steps:
   - stepId: "step_1_feedback"
     agentId: "assessment-analyzer-agent"
