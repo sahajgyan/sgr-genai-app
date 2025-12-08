@@ -2,6 +2,7 @@ package com.sgr.ai.common.service;
 
 import com.sgr.ai.common.config.AgentConfig; // Assuming this is your config class
 import dev.langchain4j.model.anthropic.AnthropicChatModel;
+import dev.langchain4j.model.azure.AzureOpenAiChatModel;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
@@ -29,6 +30,13 @@ public class ChatModelFactory {
 
     @Value("${langchain4j.ollama.base-url:http://localhost:11434}")
     private String defaultOllamaUrl;
+
+    // Inject Azure Defaults
+    @Value("${langchain4j.azure-open-ai.endpoint:}")
+    private String defaultAzureEndpoint;
+
+    @Value("${langchain4j.azure-open-ai.api-key:}")
+    private String defaultAzureKey;
 
     // Cache: provider:modelName:temperature -> Model Instance
     private final Map<String, ChatModel> modelCache = new ConcurrentHashMap<>();
@@ -96,6 +104,16 @@ public class ChatModelFactory {
                         .baseUrl("https://api.groq.com/openai/v1")
                         .modelName(config.name()) // "llama3-70b-8192"
                         .temperature(config.temperature())
+                        .build();
+            case "azure":
+            case "azure-openai":
+                return AzureOpenAiChatModel.builder()
+                        .endpoint(defaultAzureEndpoint)
+                        .apiKey(resolveKey(config, defaultAzureKey))
+                        // In Azure, 'modelName' usually refers to the 'Deployment Name'
+                        .deploymentName(config.name())
+                        .temperature(config.temperature())
+                        .logRequestsAndResponses(true) // Helpful for debugging Azure errors
                         .build();
 
             default:
