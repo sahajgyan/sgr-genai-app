@@ -1,0 +1,210 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+
+h1 {
+    color: #007bff;
+    font-size: 28px;
+    margin-top: 0;
+}
+
+h2 {
+    font-size: 22px;
+    color: #007bff;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
+}
+
+h3 {
+    font-size: 18px;
+    color: #555;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* --- TWO COLUMN LAYOUT STYLES --- */
+
+.main-layout {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 25px;
+    /* Add margin above the new footer */
+}
+
+.request-column,
+.response-column {
+    flex: 1;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fafafa;
+}
+
+.request-column {
+    background-color: #ffffff;
+}
+
+/* --- FULL RESULT FOOTER STYLES --- */
+.full-result-footer {
+    padding: 20px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #ffffff;
+}
+
+/* The H3 title needs to be adjusted for the footer look */
+.full-result-footer .section-title {
+    margin-top: 0;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed #ccc;
+    padding-bottom: 5px;
+}
+
+
+/* Media query for smaller screens (makes it single column) */
+@media (max-width: 900px) {
+    .main-layout {
+        flex-direction: column;
+    }
+}
+
+/* --- FORM AND INPUT STYLES (No Change) --- */
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #444;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+textarea.input-field {
+    resize: vertical;
+}
+
+.primary-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 15px;
+    transition: background-color 0.3s;
+}
+
+.primary-btn:hover:not(:disabled) {
+    background-color: #1e7e34;
+}
+
+.primary-btn:disabled {
+    background-color: #90ee90;
+    cursor: not-allowed;
+}
+
+/* --- STATUS AND RESULT STYLES --- */
+
+.status-section,
+.result-section {
+    margin-top: 15px;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    background-color: #ffffff;
+}
+
+.result-section {
+    padding-bottom: 0;
+    /* Tighten up the padding for the summary list */
+}
+
+.status-output {
+    background-color: #e9ecef;
+    color: #007bff;
+    padding: 10px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+/* This class now only applies to the new footer output element */
+.result-output {
+    background-color: #eee;
+    padding: 10px;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    max-height: 400px;
+    /* Give more height to the full result view */
+    overflow-y: auto;
+    font-family: Consolas, monospace;
+    /* Monospace font for code readability */
+}
+
+/* --- RESULT SUMMARY LIST STYLES (No Change) --- */
+
+.result-summary-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 15px 0;
+    border: 1px solid #cce5ff;
+    background-color: #e6f3ff;
+    border-radius: 6px;
+}
+
+.result-summary-list li {
+    padding: 8px 15px;
+    border-bottom: 1px dashed #a0d4ff;
+    display: flex;
+    justify-content: space-between;
+}
+
+.result-summary-list li:last-child {
+    border-bottom: none;
+}
+
+.result-summary-list .key {
+    font-weight: 700;
+    color: #0056b3;
+    margin-right: 15px;
+}
+
+.result-summary-list .value {
+    color: #333;
+    word-break: break-all;
+    text-align: right;
+    flex-grow: 1;
+}

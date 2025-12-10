@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Workflow Submission Client</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Async Workflow Client</h1>
+            <p>Select a workflow ID and submit the required JSON payload to start polling for results.</p>
+        </header>
+
+        <div class="main-layout">
+
+            <div class="request-column">
+                <h2>Request</h2>
+                <section class="form-group">
+                    <label for="workflowIdSelect">Workflow ID:</label>
+                    <select id="workflowIdSelect" class="input-field">
+                        <option value="">Loading Workflows...</option>
+                    </select>
+                </section>
+
+                <section class="form-group">
+                    <label for="postDataInput">Payload Data (JSON):</label>
+                    <textarea id="postDataInput" class="input-field" placeholder='{"user": "client", "data": "payload"}'
+                        rows="10"></textarea>
+                </section>
+
+                <button id="submitBtn" class="primary-btn" disabled>Submit Workflow</button>
+            </div>
+            <div class="response-column">
+                <h2>Status & Summary</h2>
+
+                <div class="status-section">
+                    <h3 class="section-title">Current Status:</h3>
+                    <pre id="statusMessage" class="status-output">Awaiting workflows list...</pre>
+                </div>
+
+                <div class="result-section">
+                    <h3 class="section-title">Result Summary:</h3>
+
+                    <ul id="resultSummary" class="result-summary-list">
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="full-result-footer">
+            <h3 class="section-title">Raw JSON Result (Full)</h3>
+            <pre id="fullResultContainer"
+                class="result-output">The complete, raw JSON output will appear here after the job is complete.</pre>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
