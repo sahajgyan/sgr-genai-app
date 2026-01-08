@@ -1,11 +1,14 @@
 package com.sgr.ai.common.config;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class WorkflowDefinition {
     private String id;
     private String name;
     private String version;
+    private String description;
     private String type; // CHAIN or ROUTER
     private List<Step> steps; // For CHAIN
 
@@ -36,6 +39,14 @@ public class WorkflowDefinition {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getType() {
@@ -78,6 +89,7 @@ public class WorkflowDefinition {
         this.maxSteps = maxSteps;
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Step {
         private String stepId;
         private String agentId;

@@ -1,0 +1,18 @@
+id: "progress-calculation-workflow"
+name: "Progress Calculation Only"
+version: "1.0"
+description: "Calculates student progress and tier advancement"
+type: "CHAIN"
+
+steps:
+  - stepId: "calculate_progress"
+    agentId: "progress-calculator-agent"
+    inputTemplate: |
+      {
+        "evaluationResult": {{evaluationResult}},
+        "currentTier": "{{currentTier}}",
+        "historicalPerformance": {{historicalPerformance}},
+        "conceptCode": "{{conceptCode}}"
+      }
+
+

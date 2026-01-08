@@ -1,0 +1,60 @@
+id: "answer-evaluator-agent"
+name: "Answer Evaluator"
+version: "1.0"
+description: "Evaluates student answers, provides feedback, and identifies learning patterns"
+
+systemPromptPath: "prompts/system.md"
+userPromptPath: "prompts/user.md"
+
+model:
+  provider: "openai"
+  name: "gpt-4o-mini"
+  temperature: 0.3  # Lower temperature for more consistent evaluation
+  maxTokens: 2500
+
+responseFormat:
+  type: "json"
+  schema:
+    type: "object"
+    properties:
+      totalQuestions:
+        type: "integer"
+      correctAnswers:
+        type: "integer"
+      scorePercentage:
+        type: "number"
+      questionResults:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            questionId:
+              type: "string"
+            isCorrect:
+              type: "boolean"
+            studentAnswer:
+              type: "string"
+            correctAnswer:
+              type: "string"
+            feedback:
+              type: "string"
+            subtopic:
+              type: "string"
+      strengthAreas:
+        type: "array"
+        items:
+          type: "string"
+      improvementAreas:
+        type: "array"
+        items:
+          type: "string"
+      overallFeedback:
+        type: "string"
+      detailedAnalysis:
+        type: "string"
+    required: ["totalQuestions", "correctAnswers", "scorePercentage", "questionResults", "overallFeedback"]
+
+metadata:
+  category: "education"
+  domain: "assessment"
+

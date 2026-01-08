@@ -14,7 +14,6 @@ import org.springframework.util.StringUtils;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -68,11 +67,12 @@ public class AgentLoaderService {
             return new AgentDefinition(
                     config.id(),
                     config.name(),
-                    "",
+                    config.description() != null ? config.description() : "",
                     systemPrompt,
                     userPrompt,
                     config.model(),
                     config.allowedTools(),
+                    config.responseFormat(),
                     config.metadata());
 
         } catch (IOException e) {
