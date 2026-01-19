@@ -1,0 +1,49 @@
+id: "progress-calculator-agent"
+name: "Progress Calculator"
+version: "1.0"
+description: "Calculates student progress tier and determines next steps for adaptive learning"
+
+systemPromptPath: "prompts/system.md"
+userPromptPath: "prompts/user.md"
+
+model:
+  provider: "openai"
+  name: "gpt-4o-mini"
+  temperature: 0.2  # Very low for consistent calculations
+  maxTokens: 1500
+
+responseFormat:
+  type: "json"
+  schema:
+    type: "object"
+    properties:
+      newProgressTier:
+        type: "string"
+        enum: ["BEGINNER", "BRONZE", "SILVER", "GOLD", "MASTERED"]
+      masteryPercentage:
+        type: "number"
+      tierProgress:
+        type: "string"
+      shouldAdvance:
+        type: "boolean"
+      nextSessionRecommendations:
+        type: "object"
+        properties:
+          numberOfQuestions:
+            type: "integer"
+          focusAreas:
+            type: "array"
+            items:
+              type: "string"
+          suggestedDifficulty:
+            type: "string"
+      progressSummary:
+        type: "string"
+      congratulatoryMessage:
+        type: "string"
+    required: ["newProgressTier", "masteryPercentage", "shouldAdvance", "nextSessionRecommendations", "progressSummary"]
+
+metadata:
+  category: "education"
+  domain: "progress-tracking"
+

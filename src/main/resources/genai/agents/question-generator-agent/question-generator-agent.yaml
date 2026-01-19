@@ -1,0 +1,54 @@
+id: "question-generator-agent"
+name: "Adaptive Question Generator"
+version: "1.0"
+description: "Generates adaptive questions based on concept, student level, and previous performance"
+
+# Prompt file paths (relative to this agent's folder)
+systemPromptPath: "prompts/system.md"
+userPromptPath: "prompts/user.md"
+
+# Model configuration
+model:
+  provider: "openai"
+  name: "gpt-4o-mini"
+  temperature: 0.7
+  maxTokens: 3000
+
+# Response format - Returns object with questions array
+responseFormat:
+  type: "json"
+  schema:
+    type: "object"
+    properties:
+      questions:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            questionId:
+              type: "string"
+            questionText:
+              type: "string"
+            questionType:
+              type: "string"
+              enum: ["MULTIPLE_CHOICE", "TRUE_FALSE", "SHORT_ANSWER"]
+            options:
+              type: "array"
+              items:
+                type: "string"
+            correctAnswer:
+              type: "string"
+            difficulty:
+              type: "string"
+              enum: ["BEGINNER", "EASY", "MEDIUM", "HARD", "EXPERT"]
+            subtopic:
+              type: "string"
+            explanation:
+              type: "string"
+          required: ["questionId", "questionText", "questionType", "correctAnswer", "difficulty"]
+    required: ["questions"]
+
+metadata:
+  category: "education"
+  domain: "adaptive-learning"
+

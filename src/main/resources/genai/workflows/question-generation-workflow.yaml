@@ -1,0 +1,18 @@
+id: "question-generation-workflow"
+name: "Question Generation Only"
+version: "1.0"
+description: "Generates adaptive questions for a student session"
+type: "CHAIN"
+
+steps:
+  - stepId: "generate_questions"
+    agentId: "question-generator-agent"
+    inputTemplate: |
+      {
+        "conceptCode": "{{conceptCode}}",
+        "conceptName": "{{conceptName}}",
+        "conceptUnits": {{conceptUnits}},
+        "currentTier": "{{currentTier}}",
+        "numberOfQuestions": {{numberOfQuestions}}
+      }
+

@@ -1,0 +1,18 @@
+id: "answer-evaluation-workflow"
+name: "Answer Evaluation Only"
+version: "1.0"
+description: "Evaluates student answers and provides feedback"
+type: "CHAIN"
+
+steps:
+  - stepId: "evaluate_answers"
+    agentId: "answer-evaluator-agent"
+    inputTemplate: |
+      {
+        "questions": {{questions}},
+        "studentAnswers": {{studentAnswers}},
+        "conceptCode": "{{conceptCode}}",
+        "timeSpentSeconds": {{timeSpentSeconds}}
+      }
+
+

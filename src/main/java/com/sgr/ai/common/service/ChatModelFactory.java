@@ -55,30 +55,39 @@ public class ChatModelFactory {
         switch (provider) {
             // 1. OpenAI (GPT-4, GPT-3.5)
             case "openai":
-                return OpenAiChatModel.builder()
+                var openAiBuilder = OpenAiChatModel.builder()
                         .apiKey(resolveKey(config, defaultOpenAiKey))
                         .modelName(config.name())
                         .temperature(config.temperature())
-                        .timeout(Duration.ofSeconds(60))
-                        .build();
+                        .timeout(Duration.ofSeconds(60));
+                if (config.maxTokens() != null) {
+                    openAiBuilder.maxTokens(config.maxTokens());
+                }
+                return openAiBuilder.build();
 
             // 2. Google Gemini (Gemini 1.5 Pro/Flash)
             case "gemini":
             case "google":
-                return GoogleAiGeminiChatModel.builder()
+                var geminiBuilder = GoogleAiGeminiChatModel.builder()
                         .apiKey(resolveKey(config, defaultGeminiKey))
                         .modelName(config.name()) // e.g., "gemini-1.5-flash"
-                        .temperature(config.temperature())
-                        .build();
+                        .temperature(config.temperature());
+                if (config.maxTokens() != null) {
+                    geminiBuilder.maxOutputTokens(config.maxTokens());
+                }
+                return geminiBuilder.build();
 
             // 3. Anthropic (Claude 3.5 Sonnet/Haiku)
             case "anthropic":
             case "claude":
-                return AnthropicChatModel.builder()
+                var anthropicBuilder = AnthropicChatModel.builder()
                         .apiKey(resolveKey(config, defaultAnthropicKey))
                         .modelName(config.name()) // e.g., "claude-3-5-sonnet-20240620"
-                        .temperature(config.temperature())
-                        .build();
+                        .temperature(config.temperature());
+                if (config.maxTokens() != null) {
+                    anthropicBuilder.maxTokens(config.maxTokens());
+                }
+                return anthropicBuilder.build();
 
             // 4. Ollama (Local Llama 3, Mistral)
             case "ollama":
@@ -91,30 +100,39 @@ public class ChatModelFactory {
             // 5. DeepSeek / Groq (OpenAI-Compatible Providers)
             // Use 'openai' client but change the Base URL
             case "deepseek":
-                return OpenAiChatModel.builder()
+                var deepseekBuilder = OpenAiChatModel.builder()
                         .apiKey(resolveKey(config, "YOUR_DEEPSEEK_KEY")) // Or inject via @Value
                         .baseUrl("https://api.deepseek.com")
                         .modelName(config.name()) // "deepseek-chat"
-                        .temperature(config.temperature())
-                        .build();
+                        .temperature(config.temperature());
+                if (config.maxTokens() != null) {
+                    deepseekBuilder.maxTokens(config.maxTokens());
+                }
+                return deepseekBuilder.build();
 
             case "groq":
-                return OpenAiChatModel.builder()
+                var groqBuilder = OpenAiChatModel.builder()
                         .apiKey(resolveKey(config, "YOUR_GROQ_KEY"))
                         .baseUrl("https://api.groq.com/openai/v1")
                         .modelName(config.name()) // "llama3-70b-8192"
-                        .temperature(config.temperature())
-                        .build();
+                        .temperature(config.temperature());
+                if (config.maxTokens() != null) {
+                    groqBuilder.maxTokens(config.maxTokens());
+                }
+                return groqBuilder.build();
             case "azure":
             case "azure-openai":
-                return AzureOpenAiChatModel.builder()
+                var azureBuilder = AzureOpenAiChatModel.builder()
                         .endpoint(defaultAzureEndpoint)
                         .apiKey(resolveKey(config, defaultAzureKey))
                         // In Azure, 'modelName' usually refers to the 'Deployment Name'
                         .deploymentName(config.name())
                         .temperature(config.temperature())
-                        .logRequestsAndResponses(true) // Helpful for debugging Azure errors
-                        .build();
+                        .logRequestsAndResponses(true); // Helpful for debugging Azure errors
+                if (config.maxTokens() != null) {
+                    azureBuilder.maxTokens(config.maxTokens());
+                }
+                return azureBuilder.build();
 
             default:
                 throw new IllegalArgumentException("Unsupported provider: " + provider);

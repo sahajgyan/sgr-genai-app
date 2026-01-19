@@ -132,8 +132,30 @@ public class WorkflowEngine {
         Map<String, String> executionContext = new HashMap<>();
         executionContext.put("USER_INPUT", initialInput);
 
+        // Parse initial JSON input and add all fields to context for template replacement
+        try {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> inputMap = jsonMapper.readValue(initialInput, Map.class);
+            for (Map.Entry<String, Object> entry : inputMap.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+                // Convert value to string - for objects/arrays, use JSON representation
+                if (value == null) {
+                    executionContext.put(key, "null");
+                } else if (value instanceof String) {
+                    executionContext.put(key, (String) value);
+                } else {
+                    // For complex objects (arrays, maps), convert to JSON string
+                    executionContext.put(key, jsonMapper.writeValueAsString(value));
+                }
+            }
+            log.info("Parsed {} fields from initial input into context", inputMap.size());
+        } catch (Exception e) {
+            log.warn("Could not parse initial input as JSON, using raw value: {}", e.getMessage());
+        }
+
         for (WorkflowDefinition.Step step : config.getSteps()) {
-            log.debug("Executing Step: {}", step.getStepId());
+            log.info("Executing Step: {}", step.getStepId());
 
             // 1. Resolve Input
             String stepInput = resolveInput(step, executionContext, currentData);
@@ -143,6 +165,7 @@ public class WorkflowEngine {
 
             // 3. Update Context
             executionContext.put(step.getStepId(), stepOutput);
+            executionContext.put("PREVIOUS_OUTPUT", stepOutput); // For {{PREVIOUS_OUTPUT}} placeholder
             currentData = stepOutput;
         }
 
@@ -188,11 +211,21 @@ public class WorkflowEngine {
             // Construct full prompt
             String fullPrompt = def.systemPrompt() + "\n\nUser Input:\n" + userMessage;
 
+            log.info("=== AGENT [{}] INPUT ===", agentId);
+            log.info("User Message: {}", userMessage.length() > 500 ? userMessage.substring(0, 500) + "..." : userMessage);
+
             // Execute
             String response = specifiedChatModel.chat(fullPrompt);
 
+            log.info("=== AGENT [{}] RAW OUTPUT ===", agentId);
+            log.info("Raw Response: {}", response);
+
             // Optional: Basic cleanup of markdown blocks if strictly needed for next steps
-            return cleanMarkdown(response);
+            String cleanedResponse = cleanMarkdown(response);
+            log.info("=== AGENT [{}] CLEANED OUTPUT ===", agentId);
+            log.info("Cleaned Response: {}", cleanedResponse);
+
+            return cleanedResponse;
 
         } catch (HttpException e) {
             int code = e.statusCode();

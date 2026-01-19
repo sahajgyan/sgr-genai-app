@@ -1,0 +1,48 @@
+id: "adaptive-learning-workflow"
+name: "Adaptive Learning Workflow"
+version: "1.0"
+description: "Generates adaptive questions, evaluates answers, and tracks student progress on concepts"
+type: "CHAIN"
+
+steps:
+  # Step 1: Generate questions based on concept and current progress
+  - stepId: "generate_questions"
+    agentId: "question-generator-agent"
+    inputTemplate: |
+      {
+        "studentId": "{{studentId}}",
+        "conceptCode": "{{conceptCode}}",
+        "conceptName": "{{conceptName}}",
+        "subject": "{{subject}}",
+        "grade": "{{grade}}",
+        "currentTier": "{{currentTier}}",
+        "previousPerformance": {{previousPerformance}},
+        "numberOfQuestions": {{numberOfQuestions}},
+        "weakAreas": "{{weakAreas}}",
+        "strongAreas": "{{strongAreas}}"
+      }
+
+  # Step 2: Evaluate student answers and generate feedback
+  - stepId: "evaluate_answers"
+    agentId: "answer-evaluator-agent"
+    inputSource: "generate_questions"
+    inputTemplate: |
+      {
+        "questions": {{PREVIOUS_OUTPUT}},
+        "studentAnswers": {{studentAnswers}},
+        "conceptCode": "{{conceptCode}}",
+        "timeSpentSeconds": {{timeSpentSeconds}}
+      }
+
+  # Step 3: Calculate progress and update tier
+  - stepId: "calculate_progress"
+    agentId: "progress-calculator-agent"
+    inputSource: "evaluate_answers"
+    inputTemplate: |
+      {
+        "evaluationResult": {{PREVIOUS_OUTPUT}},
+        "currentTier": "{{currentTier}}",
+        "historicalPerformance": {{historicalPerformance}},
+        "conceptCode": "{{conceptCode}}"
+      }
+

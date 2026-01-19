@@ -12,5 +12,6 @@ public record AgentDefinition(
                 String userPrompt, // The ACTUAL text content (loaded from MD)
                 AgentConfig.ModelConfig model,
                 List<String> allowedTools,
+                Map<String, Object> responseFormat, // Optional JSON response format schema
                 Map<String, Object> metadata) {
 }
