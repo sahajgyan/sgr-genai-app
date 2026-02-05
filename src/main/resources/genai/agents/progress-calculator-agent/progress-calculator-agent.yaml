@@ -7,9 +7,9 @@ systemPromptPath: "prompts/system.md"
 userPromptPath: "prompts/user.md"
 
 model:
-  provider: "openai"
-  name: "gpt-4o-mini"
-  temperature: 0.2  # Very low for consistent calculations
+  provider: "gemini"
+  name: "gemini-2.5-flash"
+  temperature: 0.1  # Very low for consistent calculations
   maxTokens: 1500
 
 responseFormat:

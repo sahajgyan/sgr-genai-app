@@ -1,0 +1,13 @@
+id: "assessment-router-workflow"
+name: "Smart Math Assessment Flow"
+version: "2.0"
+type: "ROUTER"  # <--- Changed to Dynamic Router
+maxSteps: 5     # Safety limit to prevent infinite loops
+
+# The brain that decides "Who goes next?"
+managerAgentId: "assessment_manager" 
+
+# The workers available to the manager
+allowedAgents: 
+  - "assessment-analyzer-agent"
+  - "assessment-feedback-agent"

@@ -1,10 +1,5 @@
-Student ID: {{studentId}}
+Using the technical analysis below, generate the final student feedback JSON.
 
-## Question
-{{questionText}}
-
-## Student Answer
-{{studentAnswer}}
-
----
-Please analyze the answer above and provide JSON output.
+--- TECHNICAL ANALYSIS START ---
+{{previous_agent_output}}
+--- TECHNICAL ANALYSIS END ---

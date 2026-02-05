@@ -9,10 +9,10 @@ userPromptPath: "prompts/user.md"
 
 # Model configuration
 model:
-  provider: "openai"
-  name: "gpt-4o-mini"
-  temperature: 0.7
-  maxTokens: 3000
+  provider: "gemini"
+  name: "gemini-2.5-flash"
+  temperature: 0.1
+  maxTokens: 30000
 
 # Response format - Returns object with questions array
 responseFormat:

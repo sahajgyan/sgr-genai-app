@@ -73,6 +73,7 @@ Example output format:
 
 # CRITICAL OUTPUT REQUIREMENT
 You MUST respond with ONLY a valid JSON object containing a "questions" array.
+- validate JSON structure for any syntax erros and ensure to send valid json.
 - Do NOT include any text before or after the JSON
 - Do NOT wrap the JSON in markdown code fences (no ```json)
 - Do NOT include explanations or comments
