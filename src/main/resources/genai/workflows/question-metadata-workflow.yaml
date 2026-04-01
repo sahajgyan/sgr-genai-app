@@ -1,0 +1,9 @@
+id: "question-metadata-workflow"
+name: "Smart Math Assessment Flow"
+version: "2.0"
+type: "CHAIN"
+
+steps:
+  - stepId: "question_metadata_manager"
+    agentId: "question_metadata_manager"
+    inputSource: "USER_INPUT"

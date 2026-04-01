@@ -12,7 +12,7 @@
     <div class="container">
         <header>
             <h1>Async Workflow Client</h1>
-            <p>Select a workflow ID and submit the required JSON payload to start polling for results.</p>
+            <p>Select a workflow ID and submit the required JSON payload to start polling for results</p>
         </header>
 
         <div class="main-layout">
@@ -23,6 +23,9 @@
                     <label for="workflowIdSelect">Workflow ID:</label>
                     <select id="workflowIdSelect" class="input-field">
                         <option value="">Loading Workflows...</option>
+                        <option value="kinematics-solver">Kinematics Solver</option>
+                        <option value="assessment-enrichment">Assessment Enrichment</option>
+                        <option value="chemistry-balancer">Chemistry Balancer</option>
                     </select>
                 </section>
 
@@ -34,6 +37,7 @@
 
                 <button id="submitBtn" class="primary-btn" disabled>Submit Workflow</button>
             </div>
+
             <div class="response-column">
                 <h2>Status & Summary</h2>
 
@@ -44,20 +48,73 @@
 
                 <div class="result-section">
                     <h3 class="section-title">Result Summary:</h3>
-
                     <ul id="resultSummary" class="result-summary-list">
                     </ul>
                 </div>
             </div>
         </div>
-        <div class="full-result-footer">
-            <h3 class="section-title">Raw JSON Result (Full)</h3>
-            <pre id="fullResultContainer"
-                class="result-output">The complete, raw JSON output will appear here after the job is complete.</pre>
+
+        <div class="full-result-footer" style="margin-top: 30px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 class="section-title" style="margin: 0;">Raw JSON Result (Full)</h3>
+
+                <button id="visualizeBtn" onclick="launchVisualizer()"
+                    style=" background-color: #4f46e5; color: white; padding: 10px 24px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer; transition: background-color 0.2s;">
+                    ✨ Visualize & Solve
+                </button>
+            </div>
+
+            <pre id="fullResultContainer" class="result-output"
+                style="background: #f4f4f5; padding: 15px; border-radius: 8px; overflow-x: auto;">The complete, raw JSON output will appear here after the job is complete.</pre>
         </div>
     </div>
 
     <script src="app.js"></script>
+
+    <script>
+        function launchVisualizer() {
+            // 1. Grab the raw JSON text from the result container
+            const resultElement = document.getElementById('fullResultContainer');
+            const rawText = resultElement.innerText || resultElement.textContent;
+
+            // 2. Grab the currently selected workflow from your dropdown
+            const workflowSelect = document.getElementById('workflowIdSelect');
+            const selectedWorkflow = workflowSelect.value;
+
+            // Safety check: ensure a workflow is actually selected
+            if (!selectedWorkflow) {
+                alert("No workflow selected. Please select a workflow first.");
+                return;
+            }
+
+            // 3. Define your Routing Dictionary
+            // Map the exact `<option value="...">` from your dropdown to the corresponding HTML file
+            const routeMap = {
+                "assessment-enrichment": "visualizer.html",
+                "kinematics-solver": "physics-visualizer.html",
+                "chemistry-balancer": "chem-visualizer.html"
+            };
+
+            // Determine target page. If it's in the map, use it. 
+            // If not, fallback to dynamically naming it (e.g., "selected-workflow-name.html")
+            const targetPage = routeMap[selectedWorkflow] || `${selectedWorkflow}.html`;
+
+            try {
+                // 4. Parse to ensure it is valid JSON
+                const jsonData = JSON.parse(rawText);
+
+                // 5. Save to session storage so the new tab can read it
+                sessionStorage.setItem('scaffoldPayload', JSON.stringify(jsonData));
+
+                // 6. Launch the specific visualizer in a new tab
+                window.open(targetPage, '_blank');
+
+            } catch (error) {
+                alert("Error: The output is not valid JSON. Please wait for the workflow to complete.");
+                console.error("Parsing Error:", error);
+            }
+        }
+    </script>
 </body>
 
 </html>
