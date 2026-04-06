@@ -73,11 +73,15 @@
 
     <script>
         function launchVisualizer() {
-            // 1. Grab the raw JSON text from the result container
+            // 1. Grab the raw JSON Response text from the result container
             const resultElement = document.getElementById('fullResultContainer');
-            const rawText = resultElement.innerText || resultElement.textContent;
+            const rawResponseText = resultElement.innerText || resultElement.textContent;
 
-            // 2. Grab the currently selected workflow from your dropdown
+            // 2. Grab the raw JSON Request text from the input textarea
+            const requestInputElement = document.getElementById('postDataInput');
+            const rawRequestText = requestInputElement.value;
+
+            // 3. Grab the currently selected workflow from your dropdown
             const workflowSelect = document.getElementById('workflowIdSelect');
             const selectedWorkflow = workflowSelect.value;
 
@@ -87,30 +91,34 @@
                 return;
             }
 
-            // 3. Define your Routing Dictionary
-            // Map the exact `<option value="...">` from your dropdown to the corresponding HTML file
+            // 4. Define your Routing Dictionary
             const routeMap = {
                 "assessment-enrichment": "visualizer.html",
                 "kinematics-solver": "physics-visualizer.html",
                 "chemistry-balancer": "chem-visualizer.html"
             };
 
-            // Determine target page. If it's in the map, use it. 
-            // If not, fallback to dynamically naming it (e.g., "selected-workflow-name.html")
             const targetPage = routeMap[selectedWorkflow] || `${selectedWorkflow}.html`;
 
             try {
-                // 4. Parse to ensure it is valid JSON
-                const jsonData = JSON.parse(rawText);
+                // 5. Parse Response to ensure it is valid JSON
+                const responseJson = JSON.parse(rawResponseText);
 
-                // 5. Save to session storage so the new tab can read it
-                sessionStorage.setItem('scaffoldPayload', JSON.stringify(jsonData));
+                // 6. Parse Request to ensure it is valid JSON
+                const requestJson = JSON.parse(rawRequestText);
 
-                // 6. Launch the specific visualizer in a new tab
+                // 7. Save BOTH to session storage
+                // 'scaffoldPayload' stores the result/output
+                sessionStorage.setItem('scaffoldPayload', JSON.stringify(responseJson));
+
+                // 'workflowRequest' stores the original input/request
+                sessionStorage.setItem('workflowRequest', JSON.stringify(requestJson));
+
+                // 8. Launch the specific visualizer in a new tab
                 window.open(targetPage, '_blank');
 
             } catch (error) {
-                alert("Error: The output is not valid JSON. Please wait for the workflow to complete.");
+                alert("Error: One of the JSON payloads is invalid. Please check your input and ensure the workflow has completed.");
                 console.error("Parsing Error:", error);
             }
         }
