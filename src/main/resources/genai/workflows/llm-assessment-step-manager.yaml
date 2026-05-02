@@ -6,7 +6,3 @@ steps:
   - stepId: "assessment-analyzer-agent"
     agentId: "assessment-analyzer-agent" # Uses the first prompts I gave you
     inputSource: "USER_INPUT" # The raw list of questions
-
-  - stepId: "assessment-feedback-agent"
-    agentId: "assessment-feedback-agent"    # Uses the prompts above
-    inputSource: "step1_analyze" # Uses the output of Step 1

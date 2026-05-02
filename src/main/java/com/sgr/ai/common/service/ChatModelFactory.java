@@ -1,19 +1,21 @@
 package com.sgr.ai.common.service;
 
-import com.sgr.ai.common.config.AgentConfig; // Assuming this is your config class
+import java.time.Duration; // Assuming this is your config class
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import com.sgr.ai.common.config.AgentConfig;
+
 import dev.langchain4j.model.anthropic.AnthropicChatModel;
 import dev.langchain4j.model.azure.AzureOpenAiChatModel;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
-import java.time.Duration;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class ChatModelFactory {
@@ -71,7 +73,8 @@ public class ChatModelFactory {
                 var geminiBuilder = GoogleAiGeminiChatModel.builder()
                         .apiKey(resolveKey(config, defaultGeminiKey))
                         .modelName(config.name()) // e.g., "gemini-1.5-flash"
-                        .temperature(config.temperature());
+                        .temperature(config.temperature())
+                        .timeout(java.time.Duration.ofSeconds(60));
                 if (config.maxTokens() != null) {
                     geminiBuilder.maxOutputTokens(config.maxTokens());
                 }

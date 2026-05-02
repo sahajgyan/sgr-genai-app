@@ -10,4 +10,3 @@ managerAgentId: "assessment_manager"
 # The workers available to the manager
 allowedAgents: 
   - "assessment-analyzer-agent"
-  - "assessment-feedback-agent"
