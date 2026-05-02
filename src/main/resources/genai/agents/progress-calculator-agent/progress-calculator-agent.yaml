@@ -8,7 +8,7 @@ userPromptPath: "prompts/user.md"
 
 model:
   provider: "gemini"
-  name: "gemini-2.5-flash"
+  name: "gemini-flash-latest"
   temperature: 0.1  # Very low for consistent calculations
   maxTokens: 1500
 

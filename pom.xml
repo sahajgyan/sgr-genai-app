@@ -84,51 +84,75 @@
                 </exclusion>
             </exclusions>
         </dependency>
-<dependency>
-        <groupId>dev.langchain4j</groupId>
-        <artifactId>langchain4j-google-ai-gemini</artifactId>
-        <exclusions>
-                <exclusion>
-                    <groupId>dev.langchain4j</groupId>
-                    <artifactId>langchain4j-http-client-jdk</artifactId>
-                </exclusion>
-            </exclusions>
-    </dependency>
 
-    <dependency>
-        <groupId>dev.langchain4j</groupId>
-        <artifactId>langchain4j-anthropic</artifactId>
-        <exclusions>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-google-ai-gemini</artifactId>
+            <exclusions>
                 <exclusion>
                     <groupId>dev.langchain4j</groupId>
                     <artifactId>langchain4j-http-client-jdk</artifactId>
                 </exclusion>
             </exclusions>
-    </dependency>
+        </dependency>
 
-    <dependency>
-        <groupId>dev.langchain4j</groupId>
-        <artifactId>langchain4j-ollama</artifactId>
-        <exclusions>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-anthropic</artifactId>
+            <exclusions>
                 <exclusion>
                     <groupId>dev.langchain4j</groupId>
                     <artifactId>langchain4j-http-client-jdk</artifactId>
                 </exclusion>
             </exclusions>
-    </dependency>
-    <dependency>
-    <groupId>dev.langchain4j</groupId>
-    <artifactId>langchain4j-azure-open-ai</artifactId>
-    <exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-ollama</artifactId>
+            <exclusions>
                 <exclusion>
                     <groupId>dev.langchain4j</groupId>
                     <artifactId>langchain4j-http-client-jdk</artifactId>
                 </exclusion>
             </exclusions>
-</dependency>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-azure-open-ai</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>dev.langchain4j</groupId>
+                    <artifactId>langchain4j-http-client-jdk</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Spring Security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!-- Spring Security OAuth2 Resource Server for JWT processing -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-resource-server</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-jose</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>32.1.1-jre</version> <!-- Use a recent version -->
         </dependency>
 
         <dependency>
@@ -167,11 +191,11 @@
             <artifactId>jakarta.annotation-api</artifactId>
         </dependency>
 
-<dependency>
-    <groupId>commons-io</groupId>
-    <artifactId>commons-io</artifactId>
-    <version>2.15.1</version>
-</dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.15.1</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -2,7 +2,7 @@ id: "question_metadata_manager"
 name: "question_metadata_manager Workflow Orchestrator"
 model:
   provider: "gemini" # or openai
-  name: "gemini-2.5-flash" # Needs to be fast and cheap, it reads a lot of data
+  name: "gemini-flash-latest" # Needs to be fast and cheap, it reads a lot of data
   temperature: 0.0
 systemPromptPath: "prompts/system.md"
 metadata:

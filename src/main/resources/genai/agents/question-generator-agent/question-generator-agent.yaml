@@ -10,7 +10,7 @@ userPromptPath: "prompts/user.md"
 # Model configuration
 model:
   provider: "gemini"
-  name: "gemini-2.5-flash"
+  name: "gemini-flash-latest"
   temperature: 0.1
   maxTokens: 30000
 
